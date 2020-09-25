@@ -32,3 +32,17 @@ if user types yes
 
 if user types no 
     exit application
+
+
+
+
+
+
+    make a class for menu 
+
+    and class for game 
+
+    use initialize methods 
+
+    use a method to call for wordslist file 
+    which will splice the word and return 
