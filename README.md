@@ -36,7 +36,7 @@ This application is mostly targeted towards high school students as some words m
 
 ----
 
-...
+
 
 
 
