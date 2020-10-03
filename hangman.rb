@@ -3,50 +3,121 @@ require "rspec"
 require "colorize"
 require "rspec"
 require "tty-prompt"
+require "json"
+
 
 @prompt = TTY::Prompt.new
 @logo = "TEST"
 
+
+
 class Game
-    attr_accessor :word, :display_word
-
-    def initialize (word, display_word)
-        @alphabet = ("a".."z").to_a
+    attr_accessor :word, :load_game, :menu, :begin
+    def initialize(word)
+        
+        @attempts = 0
         @word = word
-        @attempts = 6
-        @display_word = display_word
+        @display_word = "-" * @word.length
+        @used_letters = []
     end
 
-    def update_screen
-        system("clear")
-        puts @logo
+    def begin
+        while @attempts < 6
+        puts @display_word
+        puts "Enter guess"
+        guess = gets.chomp
+        update_display(guess) if guess
+        #add playing won break  and loses
+        end 
     end
 
-    def user_guess
 
-        if attempts > 0
-            puts "Enter a letter"
-            guess = gets.chomp
+    def update_display(guess)
+        guess.downcase!
+        current_state = "#{@display_word}"
+        if guess.length == 1
+            @display_word.length.times do |index|
+                @display_word[index] = guess if @word[index].downcase == guess
+            end
+        else
+            @display_word = guess if guess == @word.downcase
+        end
+        
+        if current_state == @display_word
+            hangman(1)
+        else
+            hangman(0)
+        end
+    end
+
+    def hangman(increment)
+        @attempts += increment
+        
+        case @attempts
+
+        when 0
+            puts " "
+        when 1
+            
+            puts     "    --------   "
+            puts     "    |      |   "
+            puts     "    |          "
+            puts     "    |          "
+            puts     "    |          "
+            puts     "  -----------  " 
+            puts "    5 attempts left"
+        when 2
+            
+            puts     "    --------   "
+            puts     "    |      |   "
+            puts     "    |      o   "
+            puts     "    |          "
+            puts     "    |          "
+            puts     "  -----------  "
+            puts "4 attempts left" 
+        when 3
+            
+            puts     "    --------   "
+            puts     "    |      |   "
+            puts     "    |      o   "
+            puts     "    |      |   "
+            puts     "    |          "
+            puts     "  -----------  " 
+            puts "3 attempts left"
+        when 4
+            puts     "    --------   "
+            puts     "    |      |   "
+            puts     "    |      o   "
+            puts     "    |     /|   "
+            puts     "    |          "
+            puts     "  -----------  " 
+            puts "2 attempts left"
+        when 5
+            puts     "    --------   "
+            puts     "    |      |   "
+            puts     "    |      o   "
+            puts     "    |     /|\  "
+            puts     "    |       \  "
+            puts     "  -----------  " 
+            puts "1 attempt left"
+        when 6
+            puts     "    --------   "
+            puts     "    |      |   "
+            puts     "    |      o   "
+            puts     "    |     /|\  "
+            puts     "    |     / \  "
+            puts     "  -----------  " 
+            puts "You Lose"
+            puts " "
+            puts "Your word was #{@word}"
         end    
-        good_guess = @word.include? guess
-
-        if good_guess == true
-            
-            
-        
-        
-
-    end        
-end  
+    end
+    begin
+    end
+end
 
 
-
-
-
-####
-## end of class
-
-## game intro
+#end class
 
 def intro
     puts "Welcome to Hangman".colorize(:light_blue)
@@ -57,60 +128,46 @@ end
 intro
 system("clear")
 
-##theme select
-
-@prompt.select("Newgame", %w(NewGame LoadGame Exit))
-if %w(NewGame)
-    puts " "
-
-elsif %w(LoadGame)
-    puts "not yet"    
-else
-    puts "not yet"
-end
-
-
-def theme
-    @prompt = TTY::Prompt.new
-    @prompt.select("Please select a theme", %w(Animals Geography Careers Computers))
-    wordlist = nil
-    @word_select = nil
-    case 
-    when %w(Animals)
-        wordlist = File.open("animals.txt")
-        @word_select = wordlist.to_a
-    when %w(Geography)
-        wordlist = File.open("geography.txt")
-        @word_select = wordlist.to_a
-    when %w(Careers)
-        wordlist = File.open("careers.txt")
-        @word_select = wordlist.to_a
-    when %w(Computers)
-        wordlist = File.open("computers.txt")
-        @word_select = wordlist.to_a
+def menu
+    @prompt.select("Newgame", %w(NewGame LoadGame Exit))
+    if %w(NewGame)
+    ""
+    system("clear")
+    elsif %w(LoadGame)
+        if File.exist?("savedgame.json")
+            Game.load_game  
+        end
+    else
+        exit
     end
 end
 
-theme
+menu 
+
+def theme_select 
+
+    @prompt = TTY::Prompt.new
+    @prompt.select("Please select a theme", %w(Animals Geography Careers Computers))
+    
+    case 
+    when %w(Animals)
+        wordlist = File.readlines("animals.txt")
+        @words = wordlist.sample.strip
+    when %w(Geography)
+        wordlist = File.readlines("geography.txt")
+        @words = wordlist.sample.strip
+    when %w(Careers)
+        wordlist = File.readlines("careers.txt")
+        @words = wordlist.sample.strip
+    when %w(Computers)
+        wordlist = File.readlines("computers.txt")
+        @words = wordlist.sample.strip
+    end
+end
+
+theme_select
 
 system("clear")
-#loading bar
 
-## pick word and split
-
-def word
-    word = @word_select.map {|word| word.upcase.strip}
-    secretword = word.sample
-    split_word = secretword.chars()
-    display_word = secretword
-end
-
-
-def display_word
-    puts "_ " * word.length
-end
-
-
-start_game = Game.new(word, display_word)
-
-start_game
+start_game = Game.new(@words)
+start_game.begin
