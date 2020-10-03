@@ -13,3 +13,7 @@ gem "colorize", "~> 0.8.1"
 gem "tty-prompt", "~> 0.22.0"
 
 gem "json", "~> 2.3"
+
+gem "rubocop", "~> 0.92.0"
+
+gem "solargraph", "~> 0.39.17"
