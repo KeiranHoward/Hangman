@@ -1,0 +1,13 @@
+actor
+electrician
+architect
+artist
+veterinarian
+musician
+programmer
+farmer
+physicist
+nurse
+accountant
+historian
+designer

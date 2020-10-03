@@ -1,10 +1,16 @@
 
 require "rspec"
 require "colorize"
-require "rspec"
 require "tty-prompt"
 require "json"
 
+
+## todo
+# -make logo
+# -make intro class
+# -play again feature
+# -tests
+# -load and save game
 
 @prompt = TTY::Prompt.new
 @logo = "TEST"
@@ -31,9 +37,17 @@ class Game
         end 
     end
 
+    def winner?
+        unless @display_word.include?("_ ")
+            puts "You won!"
+            puts "Would you like to play again?"
+            @prompt.select("Would you like to play again?", %w(Play Exit))
+            if %(Play)
 
+                
     def update_display(guess)
         guess.downcase!
+        @used_letters << guess
         current_state = "#{@display_word}"
         if guess.length == 1
             @display_word.length.times do |index|
@@ -65,42 +79,60 @@ class Game
             puts     "    |          "
             puts     "    |          "
             puts     "  -----------  " 
-            puts "    5 attempts left"
+            puts " "
+            puts "5 attempts left"
+            puts " "
+            puts "Letters Used: #{@used_letters}"
         when 2
-            
+            system("clear")
             puts     "    --------   "
             puts     "    |      |   "
             puts     "    |      o   "
             puts     "    |          "
             puts     "    |          "
             puts     "  -----------  "
-            puts "4 attempts left" 
+            puts " "
+            puts "4 attempts left"
+            puts " "
+            puts "Letters Used: #{@used_letters}"
         when 3
-            
+            system("clear")
             puts     "    --------   "
             puts     "    |      |   "
             puts     "    |      o   "
             puts     "    |      |   "
             puts     "    |          "
             puts     "  -----------  " 
+            puts " "
             puts "3 attempts left"
+            puts " "
+            puts "Letters Used: #{@used_letters}"
         when 4
+            system("clear")
             puts     "    --------   "
             puts     "    |      |   "
             puts     "    |      o   "
             puts     "    |     /|   "
             puts     "    |          "
             puts     "  -----------  " 
+            puts " "
             puts "2 attempts left"
+            puts " "
+            puts "Letters Used: #{@used_letters}"
         when 5
+            system("clear")
             puts     "    --------   "
             puts     "    |      |   "
             puts     "    |      o   "
             puts     "    |     /|\  "
             puts     "    |       \  "
             puts     "  -----------  " 
+            puts " "
             puts "1 attempt left"
+            puts " "
+            puts "Letters Used: #{@used_letters}"
         when 6
+            system("clear")
             puts     "    --------   "
             puts     "    |      |   "
             puts     "    |      o   "
@@ -110,6 +142,7 @@ class Game
             puts "You Lose"
             puts " "
             puts "Your word was #{@word}"
+             
         end    
     end
     begin
@@ -123,6 +156,12 @@ def intro
     puts "Welcome to Hangman".colorize(:light_blue)
     puts "Enter your name below".colorize(:light_blue)
     username = gets.chomp
+    if username.empty?
+        puts "You did not enter a name"
+   
+    else
+        Menu.new
+    end
 end
 
 intro
@@ -147,14 +186,14 @@ menu
 def theme_select 
 
     @prompt = TTY::Prompt.new
-    @prompt.select("Please select a theme", %w(Animals Geography Careers Computers))
+    @prompt.select("Please select a theme", %w(Animals Countries Careers Computers))
     
     case 
     when %w(Animals)
         wordlist = File.readlines("animals.txt")
         @words = wordlist.sample.strip
-    when %w(Geography)
-        wordlist = File.readlines("geography.txt")
+    when %w(Countries)
+        wordlist = File.readlines("countries.txt")
         @words = wordlist.sample.strip
     when %w(Careers)
         wordlist = File.readlines("careers.txt")

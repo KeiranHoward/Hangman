@@ -1,0 +1,12 @@
+algorithm
+application
+array
+bandwidth
+byte
+binary
+method
+function
+data
+string
+variable
+hash
