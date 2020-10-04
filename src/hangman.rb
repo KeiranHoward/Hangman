@@ -3,6 +3,8 @@ require "rspec"
 require "colorize"
 require "tty-prompt"
 require "json"
+require "jbuilder"
+require "powerpack"
 
 
 ## todo
@@ -254,16 +256,16 @@ def theme_select
         
     case 
     when %w(Animals)
-        wordlist = File.readlines("animals.txt")
+        wordlist = File.readlines("wordlists/animals.txt")
         @words = wordlist.sample.strip
     when %w(Countries)
-        wordlist = File.readlines("countries.txt")
+        wordlist = File.readlines("wordlists/countries.txt")
         @words = wordlist.sample.strip
     when %w(Careers)
-        wordlist = File.readlines("careers.txt")
+        wordlist = File.readlines("wordlists/careers.txt")
         @words = wordlist.sample.strip
     when %w(Computers)
-        wordlist = File.readlines("computers.txt")
+        wordlist = File.readlines("wordlists/computers.txt")
         @words = wordlist.sample.strip
     end
     new_game = Game.new(@words)
@@ -281,7 +283,7 @@ def main_menu
             Game.load_game  
         end
     elsif %w(Exit)
-        SystemExit
+        exit
     end
         
 end  
