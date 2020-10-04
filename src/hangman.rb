@@ -63,7 +63,7 @@ end
 class Game
     attr_accessor :word, :load_game, :menu, :start
     def initialize(word)
-        
+        @alphabet = ("a".."z")
         @attempts = 0
         @word = word
         @display_word = "-" * @word.length
@@ -79,7 +79,13 @@ class Game
             puts " "
             puts "Enter guess"
             guess = gets.chomp
-            update_display(guess) if guess
+            # check for correct input
+            if @alphabet.include? guess
+                update_display(guess)
+            else  
+                puts "Invalid guess: enter a letter"
+            end
+            # game break points
             winner = winner?
             loser = loser?
             break if guess == "exit"
@@ -101,6 +107,7 @@ class Game
         
     end    
 
+    
     def save_game
         save_game = {
             "word" => @word ,
@@ -286,7 +293,7 @@ def theme_select
             wordlist = File.readlines("wordlists/animals.txt")
             @words = wordlist.sample.strip  
         rescue 
-            puts "Unable to locate file. Read 'Help.md"
+            puts "Unable to locate file. Read 'help.md"
             
         end
         
@@ -296,7 +303,7 @@ def theme_select
             wordlist = File.readlines("wordlists/countries.txt")
             @words = wordlist.sample.strip  
         rescue 
-            puts "Unable to locate file. Read 'Help.md"
+            puts "Unable to locate file. Read 'help.md"
             
         end
 
@@ -305,7 +312,7 @@ def theme_select
             wordlist = File.readlines("wordlists/careers.txt")
             @words = wordlist.sample.strip  
         rescue 
-            puts "Unable to locate file. Read 'Help.md"
+            puts "Unable to locate file. Read 'help.md"
             
         end
     when choose_theme == "Computers"
@@ -313,7 +320,7 @@ def theme_select
             wordlist = File.readlines("wordlists/computers.txt")
             @words = wordlist.sample.strip  
         rescue 
-            puts "Unable to locate file. Read 'Help.md"
+            puts "Unable to locate file. Read 'help.md"
             
         end
     end

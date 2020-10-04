@@ -74,6 +74,16 @@ https://trello.com/b/Djx97Z8M/ruby-terminal-project
 
 ---
 
+Help: 
+
+- Use arrow keys to select from menu then hit enter key
+- Use arrow keys to select a game theme then hit enter key
+- Type a letter to make a guess
+
+To exit type "exit" in game
+
+
+
 Installation:
 
 For Mac and Linux:
