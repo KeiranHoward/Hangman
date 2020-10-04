@@ -330,7 +330,7 @@ end
 
 def main_menu
 
-    menu_select = @prompt.select("Menu", ["NewGame", "LoadGame", "Exit"])
+    menu_select = @prompt.select("Menu", ["NewGame", "Exit"])
 
 
     if menu_select == "NewGame"

@@ -9,7 +9,9 @@ Installation:
 
 For Mac and Linux:
 
-​ To install game run hangman.exe
+​ To install game run "run_game.exe"
+
+If game does not start type ./run_game.sh in terminal
 
 For Windows
 

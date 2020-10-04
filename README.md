@@ -46,15 +46,17 @@ If the letter is not in the word, the application will print out last guess as w
 
 Word Theme Selection:
 
-The application will have 4 separate ruby files each containing an array of strings representing a common theme. The user will be given a option upon a new game whereas they can select which theme or wordlist the word will be randomly selected from.
+The application will ask the user which word theme they would like to play. Each of these themes will relate to a text file in a word list folder. When the user selects a theme, the application will read the lines of the text file and return a random word using the .sample method. This word will then be used for the main game method.
 
 Save Game:
 
-The application will have an option which will save the current instance of your game and store it in a separate file. This can then be called using an option. The saved file data will be stored using a Ruby gem which will allow for a save and load function. 
+The application will have an option which will save the current instance of your game and store it in a separate file. This can then be called using an option. The saved file data will be stored using JSON  which will allow for a save and load function. 
+
+The JSON method will send and recall data of the word, current hangman display and attempts. This will be stored in a relative .json file using JSON arguments.
 
 Ascii hangman:
 
-When the user makes an incorrect letter attempt a component of a hang man image will be printed to the screen. Each time a wrong letter is added the hangman parts will be added incrementally. 
+The application will have multiple stages of a hangman image made from ascii text. When the user makes an incorrect guess a section of the hangman image will be added incrementally. Once the hangman image has been completed the application will print a "you lose" message and ask if the user would like to play again.
 
 ### Flow Control Diagram
 
@@ -88,7 +90,9 @@ Installation:
 
 For Mac and Linux:
 
-​	To install game run hangman.exe
+​ To install game run "run_game.exe"
+
+If game does not start type ./run_game.sh in terminal
 
 For Windows
 
