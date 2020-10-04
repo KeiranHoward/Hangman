@@ -91,11 +91,11 @@ class Game
     def loser?
         if @attempts == 6
             "You lost"
-            @prompt.select("Would you like to play again?", %w(Play Exit))
-            if %w(Play)
+            play_again = @prompt.select("Would you like to play again?", ["Play", "Exit"])
+            unless play_again == "Play"
+                exit
+            else
                 main_menu
-            elsif %w(Exit)
-                SystemExit
             end
             true
         end  
@@ -106,11 +106,11 @@ class Game
         unless @display_word.include?("-")
             puts "You won!"
             puts " "
-            @prompt.select("Would you like to play again?", %w(Play Exit))
-            if %w(Play)
+            play_again = @prompt.select("Would you like to play again?", ["Play", "Exit"])
+            unless play_again == "Play"
+                exit
+            else
                 main_menu
-            elsif %w(Exit)
-                SystemExit
             end
             true
         end        
@@ -252,19 +252,18 @@ clear_screen
 def theme_select 
 
     @prompt = TTY::Prompt.new
-    @prompt.select("Please select a theme", %w(Animals Countries Careers Computers))
-        
-    case 
-    when %w(Animals)
+    choose_theme = @prompt.select("Please select a theme", ["Animals", "Countries", "Careers", "Computers"])
+    case choose_theme
+    when "Animals"
         wordlist = File.readlines("wordlists/animals.txt")
         @words = wordlist.sample.strip
-    when %w(Countries)
+    when "Countries"
         wordlist = File.readlines("wordlists/countries.txt")
         @words = wordlist.sample.strip
-    when %w(Careers)
+    when "Careers"
         wordlist = File.readlines("wordlists/careers.txt")
         @words = wordlist.sample.strip
-    when %w(Computers)
+    when "Computers"
         wordlist = File.readlines("wordlists/computers.txt")
         @words = wordlist.sample.strip
     end
@@ -274,15 +273,15 @@ end
 
 def main_menu
 
-    @prompt.select("Menu", %w(NewGame LoadGame Exit))
+    menu_select = @prompt.select("Menu", ["NewGame", "LoadGame", "Exit"])
 
-    if %w(NewGame)
+    if menu_select == "NewGame"
         theme_select
-    elsif %w(LoadGame)
+    elsif menu_select == "LoadGame"
         if File.exist?("savedgame.json")
             Game.load_game  
         end
-    elsif %w(Exit)
+    else
         exit
     end
         
