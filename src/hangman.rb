@@ -255,17 +255,33 @@ def theme_select
     choose_theme = @prompt.select("Please select a theme", ["Animals", "Countries", "Careers", "Computers"])
     case choose_theme
     when "Animals"
+        begin
         wordlist = File.readlines("wordlists/animals.txt")
         @words = wordlist.sample.strip
+        rescue
+            puts "cannot locate file. Please read Help.md"
+        end
     when "Countries"
+        begin
         wordlist = File.readlines("wordlists/countries.txt")
         @words = wordlist.sample.strip
+        rescue
+            puts "cannot locate file. Please read Help.md"
+        end
     when "Careers"
+        begin
         wordlist = File.readlines("wordlists/careers.txt")
         @words = wordlist.sample.strip
+        rescue
+            puts "cannot locate file. Please read Help.md"
+        end
     when "Computers"
+        begin
         wordlist = File.readlines("wordlists/computers.txt")
         @words = wordlist.sample.strip
+        rescue
+            puts "cannot locate file. Please read Help.md"
+        end
     end
     new_game = Game.new(@words)
     new_game.begin  
@@ -280,6 +296,8 @@ def main_menu
     elsif menu_select == "LoadGame"
         if File.exist?("savedgame.json")
             Game.load_game  
+        else 
+            puts "Save game not found"
         end
     else
         exit
