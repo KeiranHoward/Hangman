@@ -61,7 +61,7 @@ end
 
 
 class Game
-    attr_accessor :word, :load_game, :menu, :begin
+    attr_accessor :word, :load_game, :menu, :start
     def initialize(word)
         
         @attempts = 0
@@ -71,7 +71,7 @@ class Game
         @prompt = TTY::Prompt.new
     end
 
-    def begin
+    def start
         while @attempts < 6
             winner = false
             puts " "
@@ -83,9 +83,33 @@ class Game
             winner = winner?
             loser = loser?
             break if guess == "exit"
-            break if winner
-            break if loser
+            break if winner or loser 
+            if guess == "save"
+                save_game
+                puts "Game has been saved".colorize(:green)
+                exit
+            end
         end 
+    end
+
+    def load_game
+        load_save = File.read("savegame.json")
+        saved_hash = JSON.parse(load_save)
+        @word = saved_hash["word"]
+        @display_word = saved_hash["display_word"]
+        @attempts = saved_hash["attempts"]
+        
+    end    
+
+    def save_game
+        save_game = {
+            "word" => @word ,
+            "display_word" => @display_word,
+            "attempts" => @attempts - 1
+        }
+        File.open("savegame.json","w") do |f|
+          f.write(JSON.pretty_generate(save_game))
+        end
     end
 
     def loser?
@@ -135,6 +159,8 @@ class Game
             hangman(0)
         end
     end
+    
+
 
     def hangman(increment)
         @attempts += increment
@@ -240,7 +266,7 @@ def intro
     puts "guess the correct word before the hangman is complete".colorize(:aqua)
     puts "you can exit at anytime by typing in exit".colorize(:aqua)
     puts " "
-    puts "Press any key to continue...".colorize(:aqua)
+    puts "Press Enter key to continue...".colorize(:aqua)
     enter = gets.chomp
 end
 
@@ -253,53 +279,64 @@ def theme_select
 
     @prompt = TTY::Prompt.new
     choose_theme = @prompt.select("Please select a theme", ["Animals", "Countries", "Careers", "Computers"])
-    case choose_theme
-    when "Animals"
+
+    case 
+    when choose_theme == "Animals"
         begin
-        wordlist = File.readlines("wordlists/animals.txt")
-        @words = wordlist.sample.strip
-        rescue
-            puts "cannot locate file. Please read Help.md"
+            wordlist = File.readlines("wordlists/animals.txt")
+            @words = wordlist.sample.strip  
+        rescue 
+            puts "Unable to locate file. Read 'Help.md"
+            
         end
-    when "Countries"
+        
+
+    when choose_theme == "Countries"
         begin
-        wordlist = File.readlines("wordlists/countries.txt")
-        @words = wordlist.sample.strip
-        rescue
-            puts "cannot locate file. Please read Help.md"
+            wordlist = File.readlines("wordlists/countries.txt")
+            @words = wordlist.sample.strip  
+        rescue 
+            puts "Unable to locate file. Read 'Help.md"
+            
         end
-    when "Careers"
+
+    when choose_theme == "Careers"
         begin
-        wordlist = File.readlines("wordlists/careers.txt")
-        @words = wordlist.sample.strip
-        rescue
-            puts "cannot locate file. Please read Help.md"
+            wordlist = File.readlines("wordlists/careers.txt")
+            @words = wordlist.sample.strip  
+        rescue 
+            puts "Unable to locate file. Read 'Help.md"
+            
         end
-    when "Computers"
+    when choose_theme == "Computers"
         begin
-        wordlist = File.readlines("wordlists/computers.txt")
-        @words = wordlist.sample.strip
-        rescue
-            puts "cannot locate file. Please read Help.md"
+            wordlist = File.readlines("wordlists/computers.txt")
+            @words = wordlist.sample.strip  
+        rescue 
+            puts "Unable to locate file. Read 'Help.md"
+            
         end
     end
     new_game = Game.new(@words)
-    new_game.begin  
+    new_game.start  
 end
 
 def main_menu
 
     menu_select = @prompt.select("Menu", ["NewGame", "LoadGame", "Exit"])
 
+
     if menu_select == "NewGame"
         theme_select
     elsif menu_select == "LoadGame"
-        if File.exist?("savedgame.json")
-            Game.load_game  
-        else 
-            puts "Save game not found"
+        begin
+            Game.load_game
+        rescue 
+            puts "No saved games found"
+            
         end
-    else
+        
+    elsif
         exit
     end
         
